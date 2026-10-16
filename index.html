@@ -1,0 +1,1393 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
+<title>Job Application Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400..700&display=swap">
+<style id="pf-style">
+/* Layout: the portfolio opens like a bio-data file. A sticky tab strip is the index; each tab is one sheet with ruled rows, mono tenure stamps and a photo set against an offset frame. The developer screens reuse the same sheet language with form fields. */
+:root{
+  --bg:#EEF1F6;--surface:#FFFFFF;--sunken:#E6EBF3;--ink:#0C1A2B;--ink-2:#37475B;--muted:#5B697D;
+  --line:#D2DAE6;--accent:#1F46E0;--accent-ink:#FFFFFF;--accent-soft:#E2E8FD;
+  --mark:#FFD84A;--mark-ink:#1A1400;--good:#0E7A55;--bad:#B42318;--bad-soft:#FDE7E5;
+  --warn-soft:#FFF3C6;--warn-ink:#5A4300;--shadow:0 10px 28px -14px rgba(12,26,43,.28);
+  --f-display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --f-body:'Instrument Sans','Segoe UI',system-ui,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#09111D;--surface:#101C2E;--sunken:#0B1524;--ink:#E7EDF6;--ink-2:#B7C4D6;--muted:#8A99AF;
+    --line:#21314A;--accent:#86A0FF;--accent-ink:#09111D;--accent-soft:#18274D;
+    --mark:#6B5600;--mark-ink:#FFF1BF;--good:#4CC9A0;--bad:#FF8F85;--bad-soft:#3B1A1A;
+    --warn-soft:#3A3011;--warn-ink:#FFE08A;--shadow:0 10px 28px -14px rgba(0,0,0,.7);color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#09111D;--surface:#101C2E;--sunken:#0B1524;--ink:#E7EDF6;--ink-2:#B7C4D6;--muted:#8A99AF;
+  --line:#21314A;--accent:#86A0FF;--accent-ink:#09111D;--accent-soft:#18274D;
+  --mark:#6B5600;--mark-ink:#FFF1BF;--good:#4CC9A0;--bad:#FF8F85;--bad-soft:#3B1A1A;
+  --warn-soft:#3A3011;--warn-ink:#FFE08A;--shadow:0 10px 28px -14px rgba(0,0,0,.7);color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--f-body);-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3,p,dl,dd,ol{margin:0}
+ol{padding:0;list-style:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ic{display:inline-grid;place-items:center;line-height:0;flex:none}
+.stack{display:grid;gap:16px;min-width:0}
+.stack-s{display:grid;gap:12px;min-width:0}
+
+/* header + tabs */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--surface)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:10px;height:56px}
+.mono-mark{width:34px;height:34px;flex:none;display:grid;place-items:center;border:0;cursor:pointer;font:700 14px var(--f-display);letter-spacing:.02em;background:var(--ink);color:var(--surface);border-radius:3px}
+.tabs{display:flex;gap:2px;overflow-x:auto;flex:1;min-width:0;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 24px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 24px),transparent)}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;appearance:none;border:0;background:none;color:var(--muted);font:500 14px var(--f-body);padding:10px 12px;border-radius:3px;cursor:pointer;position:relative;white-space:nowrap;transition:color .15s}
+.tab:hover{color:var(--ink)}
+.tab[aria-current="page"]{color:var(--ink);font-weight:600}
+.tab[aria-current="page"]::after{content:"";position:absolute;left:12px;right:12px;bottom:3px;height:3px;border-radius:2px;background:var(--accent)}
+.icon-btn{appearance:none;width:36px;height:36px;flex:none;display:inline-grid;place-items:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:3px;cursor:pointer;transition:background .15s,border-color .15s}
+.icon-btn:hover:not(:disabled){background:var(--accent-soft);border-color:var(--accent)}
+.icon-btn:disabled{opacity:.4;cursor:not-allowed}
+.icon-btn.small{width:30px;height:30px}
+.icon-btn.armed{width:auto;padding:0 10px;background:var(--bad);border-color:var(--bad);color:var(--surface);font:600 13px var(--f-body)}
+
+/* page + section head */
+.page{padding-block:28px 56px;min-width:0}
+.view{animation:rise .28s ease both}
+@keyframes rise{from{opacity:.4;transform:translateY(10px)}to{opacity:1;transform:none}}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;margin-bottom:22px;padding-bottom:14px;border-bottom:2px solid var(--ink)}
+.sec-head h1{font:600 clamp(28px,6vw,44px)/1.05 var(--f-display);letter-spacing:-.02em;text-wrap:balance}
+.meta{font:500 12px var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.eyebrow{font:500 12px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mini-h{font:500 12px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.lead{font-size:clamp(17px,2.4vw,20px);color:var(--ink-2);max-width:60ch}
+.banner{margin-bottom:20px;padding:10px 14px;border-radius:3px;background:var(--warn-soft);color:var(--warn-ink);font-size:14px}
+.empty{padding:28px;border:1px dashed var(--line);border-radius:4px;color:var(--muted);text-align:center}
+
+/* buttons, chips */
+.btn{appearance:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 15px var(--f-body);padding:11px 16px;border-radius:3px;border:1px solid var(--ink);background:var(--surface);color:var(--ink);cursor:pointer;transition:transform .12s,background .15s}
+.btn:hover:not(:disabled){transform:translateY(-1px)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{border-color:var(--line)}
+.btn.small{padding:7px 11px;font-size:13px}
+.btn.armed{background:var(--bad);border-color:var(--bad);color:var(--surface)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.file-btn{position:relative;overflow:hidden}
+.fin{position:absolute;inset:0;width:100%;height:100%;opacity:0;font-size:0;cursor:pointer;z-index:2}
+.file-btn:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:14px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink-2)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--good);flex:none}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.filter{appearance:none;font:500 14px var(--f-body);padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.filter:hover{border-color:var(--accent)}
+.filter[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+
+/* home */
+.hero{display:grid;gap:32px;align-items:center}
+@media (min-width:780px){.hero{grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:56px}}
+.hero-text{display:grid;gap:14px;justify-items:start;min-width:0}
+.pos-line{line-height:1.2}
+.position{font:600 clamp(18px,3.4vw,24px)/1.5 var(--f-display);background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 3px;-webkit-box-decoration-break:clone;box-decoration-break:clone;overflow-wrap:anywhere}
+.hero h1{font:700 clamp(40px,9vw,84px)/.95 var(--f-display);letter-spacing:-.03em;text-wrap:balance;overflow-wrap:anywhere}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.photo{position:relative;justify-self:start;width:min(60vw,236px);aspect-ratio:4/5;margin-right:12px}
+@media (min-width:780px){.photo{justify-self:end;width:min(100%,320px)}}
+.photo::before{content:"";position:absolute;inset:12px -12px -12px 12px;border:2px solid var(--accent);border-radius:3px;pointer-events:none}
+.frame{position:absolute;inset:0;border-radius:3px;overflow:hidden;background:var(--sunken);display:grid;place-items:center}
+.frame img{width:100%;height:100%;object-fit:cover;display:block}
+.initials{font:700 72px var(--f-display);color:var(--muted);letter-spacing:-.02em}
+.home-grid{display:grid;gap:36px;margin-top:52px}
+@media (min-width:780px){.home-grid{grid-template-columns:1fr 1fr;gap:56px}}
+.glance{border-top:1px solid var(--line)}
+.glance-row{appearance:none;display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;width:100%;text-align:left;padding:14px 6px;background:none;border:0;border-bottom:1px solid var(--line);color:var(--ink);cursor:pointer;font:500 17px var(--f-display);transition:background .15s}
+.glance-row:hover{background:var(--accent-soft)}
+.glance-row .count{font:500 14px var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.glance-row .ic{transition:transform .15s}
+.glance-row:hover .ic{transform:translateX(4px)}
+
+/* bio-data sheet */
+.sheet{display:grid}
+.row{display:flex;align-items:baseline;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);transition:background .15s}
+.row:hover{background:var(--accent-soft)}
+.row dt{flex:none;max-width:46%;font:500 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.leader{flex:1;min-width:10px;border-bottom:1px dotted var(--muted);opacity:.55;transform:translateY(-4px)}
+.row dd{min-width:0;font-weight:500;text-align:right;overflow-wrap:anywhere}
+.objective{margin-bottom:28px;padding:18px 20px;background:var(--surface);border:1px solid var(--line);border-radius:4px}
+.objective p{color:var(--ink-2);max-width:70ch}
+
+/* timeline */
+.timeline{display:grid}
+.tl-item{position:relative;padding:0 0 22px 26px;margin-left:6px;border-left:2px solid var(--line)}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:"";position:absolute;left:-8px;top:18px;width:14px;height:14px;border-radius:50%;background:var(--surface);border:3px solid var(--accent)}
+.tl-card{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:16px 18px;display:grid;gap:4px;justify-items:start;transition:box-shadow .2s,transform .2s}
+.tl-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.stamp{font:500 13px var(--f-mono);color:var(--accent);letter-spacing:.02em}
+.tl-card h2{font:600 clamp(20px,3.4vw,26px)/1.2 var(--f-display);letter-spacing:-.01em;overflow-wrap:anywhere}
+.role{font:500 17px var(--f-display);color:var(--ink-2)}
+.honor{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font:600 13px var(--f-body);color:var(--warn-ink);background:var(--warn-soft);padding:4px 10px;border-radius:3px}
+.span{margin-bottom:28px;padding:16px 18px;background:var(--surface);border:1px solid var(--line);border-radius:4px}
+.span h2{font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.span-row,.axis{display:grid;grid-template-columns:minmax(80px,28%) 1fr;gap:10px;align-items:center}
+.span-row{padding:5px 0}
+.span-name{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track{position:relative;height:14px;background:var(--sunken);border-radius:2px}
+.fill{position:absolute;top:0;bottom:0;background:var(--accent);border-radius:2px;transform-origin:left;animation:grow .6s ease both}
+@keyframes grow{from{transform:scaleX(0)}}
+.ticks{position:relative;height:20px;margin-top:4px;font:400 11px var(--f-mono);color:var(--muted)}
+.ticks span{position:absolute;transform:translateX(-50%)}
+
+/* skills */
+.skill-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.skill{background:var(--surface);border:1px solid var(--line);padding:14px 16px;border-radius:4px;display:grid;gap:10px;align-content:start;transition:box-shadow .2s,transform .2s}
+.skill:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.skill-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.skill h3{font:600 18px/1.25 var(--f-display);overflow-wrap:anywhere}
+.type{font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);flex:none}
+.meter{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.meter i{height:8px;background:var(--sunken);border-radius:1px}
+.meter i.on{background:var(--accent);animation:fill .35s calc(var(--i)*70ms) both}
+@keyframes fill{from{background:var(--sunken)}}
+.level{font:500 13px var(--f-mono);color:var(--ink-2)}
+
+/* projects */
+.proj-grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.proj{appearance:none;display:flex;flex-direction:column;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:4px;overflow:hidden;cursor:pointer;padding:0;transition:transform .2s,box-shadow .2s}
+.proj:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.cover{aspect-ratio:16/10;background:var(--sunken);display:grid;place-items:center;overflow:hidden;color:var(--muted)}
+.cover img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.proj:hover .cover img{transform:scale(1.04)}
+.proj .body{padding:14px 16px 16px;display:grid;gap:6px}
+.proj h3{font:600 20px/1.2 var(--f-display)}
+.proj p{color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tags{font:500 12px var(--f-mono);color:var(--accent)}
+.vid-tile{width:100%;height:100%;display:grid;place-items:center;align-content:center;gap:6px;background:linear-gradient(135deg,#16233a,#0b1220);color:#fff}
+.play{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.16);display:grid;place-items:center}
+.vt{font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+
+/* modal */
+.scrim{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:rgba(6,12,22,.76);padding:max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(12px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.modal{position:relative;background:var(--surface);color:var(--ink);width:min(960px,100%);max-height:100%;overflow:auto;border-radius:6px;min-width:0;animation:rise .22s ease both}
+.modal .x{position:absolute;top:10px;right:10px;z-index:3}
+.stage-wrap{position:relative;background:#05090f}
+.stage{display:grid;place-items:center;min-height:200px}
+.stage img,.stage video{display:block;max-width:100%;max-height:62vh;object-fit:contain}
+.no-media{display:grid;gap:8px;justify-items:center;padding:48px 16px;color:#cbd5e1;text-align:center}
+.nav-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:2}
+.nav-btn.prev{left:10px}.nav-btn.next{right:10px}
+.thumbs{display:flex;gap:8px;overflow-x:auto;padding:12px 20px 0}
+.thumb{appearance:none;flex:none;width:62px;height:62px;border-radius:3px;overflow:hidden;border:2px solid transparent;padding:0;background:var(--sunken);cursor:pointer}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb[aria-current="true"]{border-color:var(--accent)}
+.m-body{padding:16px 20px 22px;display:grid;gap:8px}
+.m-body h2{font:600 clamp(22px,4vw,30px)/1.15 var(--f-display);letter-spacing:-.01em}
+.m-body p{color:var(--ink-2);white-space:pre-line;max-width:70ch}
+
+/* reference + contact */
+.ref-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.ref{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:18px;display:grid;gap:12px;align-content:start;transition:box-shadow .2s,transform .2s}
+.ref:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.ref h2{font:600 22px/1.2 var(--f-display);overflow-wrap:anywhere}
+.kv{display:grid;gap:2px;padding-top:10px;border-top:1px solid var(--line)}
+.kv dt{font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.kv dd{display:flex;justify-content:space-between;align-items:center;gap:8px;overflow-wrap:anywhere;user-select:text}
+.contact-list{display:grid;gap:0;margin:22px 0;border-top:2px solid var(--ink)}
+.contact-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:18px 4px;border-bottom:1px solid var(--line);transition:background .15s}
+.contact-row:hover{background:var(--accent-soft)}
+.contact-row>div{min-width:0}
+.contact-val{font:600 clamp(20px,4.6vw,30px)/1.2 var(--f-display);letter-spacing:-.01em;overflow-wrap:anywhere;user-select:text;margin-top:2px}
+.foot{touch-action:manipulation;border-top:1px solid var(--line);color:var(--muted);font:400 13px var(--f-mono)}
+.foot .wrap{padding-block:20px}
+.seal{cursor:default;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+
+/* gateway */
+.gate{display:grid;place-items:center;padding:48px 0}
+.gate-card{width:min(420px,100%)}
+.gate-card h1{font:600 30px/1.1 var(--f-display);letter-spacing:-.02em}
+.pw-row{display:flex;gap:8px}
+.msg{min-height:1.4em;font-size:14px;color:var(--bad)}
+.msg.ok{color:var(--good)}
+
+/* developer */
+.devbar{background:var(--ink);color:var(--bg)}
+.devbar-in{display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap;padding-block:10px}
+.devtitle{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tagline{font:500 12px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;background:var(--mark);color:var(--mark-ink);padding:3px 8px;border-radius:2px}
+.devnote{font-size:13px;opacity:.8}
+.devactions{display:flex;gap:8px}
+.devbar .btn{background:transparent;color:inherit;border-color:currentColor}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:16px;display:grid;gap:14px;min-width:0}
+.grid2{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+.item-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.item-title{font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tools{display:flex;gap:6px}
+.f{display:grid;gap:6px;min-width:0}
+.f>span{font:500 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.in{width:100%;min-width:0;font:400 16px var(--f-body);color:var(--ink);background:var(--sunken);border:1px solid var(--line);border-radius:3px;padding:10px 12px}
+.in:focus{border-color:var(--accent);outline:2px solid var(--accent);outline-offset:0}
+.in:disabled{opacity:.5}
+textarea.in{resize:vertical;min-height:90px}
+.check{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--ink-2);cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+.hint{font-size:13px;color:var(--muted)}
+.photo-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.photo-prev{width:112px;aspect-ratio:4/5;background:var(--sunken);border:1px solid var(--line);border-radius:3px;overflow:hidden;display:grid;place-items:center}
+.photo-prev img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-prev .initials{font-size:36px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.mthumb{position:relative;aspect-ratio:1;background:var(--sunken);border-radius:3px;overflow:hidden;border:1px solid var(--line)}
+.mthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.mrm{appearance:none;position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:50%;border:0;background:var(--ink);color:var(--bg);display:grid;place-items:center;cursor:pointer}
+.ext{position:absolute;left:4px;bottom:4px;font:500 10px var(--f-mono);background:var(--warn-soft);color:var(--warn-ink);padding:2px 5px;border-radius:2px}
+.savebar{position:sticky;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line)}
+.savebar .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap;padding-block:10px calc(10px + env(safe-area-inset-bottom,0px))}
+.sv-left{display:grid;gap:2px;min-width:0}
+.sv-status{font:500 14px var(--f-body);display:inline-flex;align-items:center;gap:8px}
+.sv-status[data-state]::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--good)}
+.sv-status[data-state="dirty"]::before{background:#E0A800}
+.sv-status[data-state="saving"]::before{background:var(--accent)}
+.sv-size{font:400 12px var(--f-mono);color:var(--muted)}
+.sv-size[data-warn="1"]{color:var(--bad)}
+.sv-right{display:flex;gap:8px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);max-width:calc(100% - 32px);z-index:120;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:3px;font:500 14px var(--f-body);box-shadow:var(--shadow)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+<div id="pf-root"></div>
+<script type="application/json" id="pf-data">
+{
+  "v": 1,
+  "sample": true,
+  "auth": {"salt": "f479cd7bb128d12a2c161d5898b7f43b", "iter": 150000, "hash": "ef65b46bc786610b02215e43f740299beeb6be74cad38bc978e95ddc8afad0c6"},
+  "profile": {
+    "name": "Your Full Name",
+    "position": "Position You Are Applying For",
+    "summary": "Write two or three sentences here that tell an employer who you are, what you do best and why you are a good fit for the role.",
+    "availability": "Available to start immediately",
+    "photo": ""
+  },
+  "personal": {
+    "objective": "Describe the kind of role you are looking for and what you can contribute to the company.",
+    "fields": [
+      {"label": "Full name", "value": "Your Full Name", "pin": false},
+      {"label": "Date of birth", "value": "Month DD, YYYY", "pin": false},
+      {"label": "Age", "value": "", "pin": false},
+      {"label": "Gender", "value": "", "pin": false},
+      {"label": "Civil status", "value": "", "pin": false},
+      {"label": "Nationality", "value": "", "pin": true},
+      {"label": "Religion", "value": "", "pin": false},
+      {"label": "Address", "value": "Street, Barangay, City, Province", "pin": true},
+      {"label": "Languages spoken", "value": "English, Filipino", "pin": true}
+    ]
+  },
+  "education": [
+    {"school": "Name of Your School", "from": "2018", "to": "2022", "present": false, "honors": "Honors you received, for example Dean's Lister"}
+  ],
+  "experience": [
+    {"company": "Company Name", "from": "2022", "to": "", "present": true, "position": "Job Position"},
+    {"company": "Previous Company Name", "from": "2019", "to": "2022", "present": false, "position": "Job Position"}
+  ],
+  "skills": [
+    {"name": "Customer Service", "type": "Skill", "level": 4},
+    {"name": "Microsoft Office", "type": "Skill", "level": 4},
+    {"name": "Problem Solving", "type": "Skill", "level": 3},
+    {"name": "Public Speaking", "type": "Talent", "level": 3},
+    {"name": "Creative Writing", "type": "Talent", "level": 4}
+  ],
+  "projects": [
+    {"id": "p1", "title": "Project Title", "description": "Describe what the project was, your role, the tools you used and the result.", "media": []},
+    {"id": "p2", "title": "Another Project Title", "description": "Add photos or a short video as proof of this project.", "media": []}
+  ],
+  "references": [
+    {"name": "Reference Full Name", "address": "Street, Barangay, City, Province", "position": "Current Job Position", "phone": "09XX XXX XXXX"},
+    {"name": "Second Reference Full Name", "address": "Street, Barangay, City, Province", "position": "Current Job Position", "phone": "09XX XXX XXXX"}
+  ],
+  "contact": {"phone": "09XX XXX XXXX", "email": "yourname@example.com", "messenger": "Your Messenger Name"}
+}
+</script>
+<script id="pf-app">
+(function(){
+'use strict';
+
+const TOP = '<title>Job Application Portfolio</title><meta name="claude:viewport-fit-sides" content="cover"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400..700&display=swap">';
+const FALLBACK_RESET = ':root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}';
+const TABS = [['home','Home'],['personal','Personal Information'],['education','Educational Background'],['experience','Experience'],['skills','Skills and Talent'],['projects','Project Accomplished'],['reference','Reference'],['contact','Contact Me']];
+const LEVELS = ['Beginner','Basic','Intermediate','Advanced','Expert'];
+const NOW_YEAR = new Date().getFullYear();
+const LIMIT = 15 * 1048576;
+const EMBED_VIDEO_MAX = 7 * 1048576;
+const ASSET_MAX = 20 * 1048576;
+
+const $root = document.getElementById('pf-root');
+let state = normalize(JSON.parse(document.getElementById('pf-data').textContent));
+let draft = null;
+let mode = 'site';
+let siteView = 'home';
+let devTab = 'home';
+let devPreview = false;
+let dirty = false;
+let saving = false;
+let canSave = true;
+const API = '/.netlify/functions/portfolio';
+let remote = false;
+let devPw = sget('pf.pw') || '';
+const remoteReady = (async () => {
+  try {
+    const ctl = new AbortController();
+    const t = setTimeout(() => ctl.abort(), 6000);
+    const r = await fetch(API, {cache:'no-store', signal:ctl.signal});
+    clearTimeout(t);
+    if (!r.ok || !/json/.test(r.headers.get('content-type') || '')) return;
+    const j = await r.json();
+    remote = true;
+    if (j && j.data && typeof j.data === 'object') state = normalize(Object.assign({}, j.data, {sample:false, auth:{}}));
+  } catch (e) {}
+})();
+function authHeaders(extra){ return Object.assign({'x-dev-password':encodeURIComponent(devPw)}, extra || {}); }
+async function uploadMedia(blob, type){
+  const r = await fetch(API + '?action=upload', {method:'POST', headers:authHeaders({'content-type':type}), body:blob});
+  if (!r.ok) throw new Error('upload ' + r.status);
+  const j = await r.json();
+  return API + '?media=' + j.id;
+}
+function dataUrlToBlob(u){
+  const i = u.indexOf(',');
+  const mime = u.slice(5, i).split(';')[0];
+  const bin = atob(u.slice(i + 1));
+  const b = new Uint8Array(bin.length);
+  for (let k = 0; k < bin.length; k++) b[k] = bin.charCodeAt(k);
+  return new Blob([b], {type:mime});
+}
+let draftT;
+function saveDraft(){ if (draft && dirty) { try { localStorage.setItem('pf.draft2', JSON.stringify(draft)); } catch (e) {} } }
+function clearDraft(){ try { localStorage.removeItem('pf.draft2'); } catch (e) {} }
+let redrawDev = function(){};
+let fails = 0, lockUntil = 0;
+
+/* ---------- small helpers ---------- */
+const ICONS = {
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 3V1M12 23v-2M3 12H1M23 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4l-1.4 1.4M19.8 4.2l-1.4 1.4"/>',
+  moon:'<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/>',
+  copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/>',
+  check:'<path d="m5 12 5 5 9-10"/>',
+  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+  star:'<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9Z"/>',
+  up:'<path d="m6 15 6-6 6 6"/>',
+  down:'<path d="m6 9 6 6 6-6"/>',
+  trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  play:'<path d="M8 5v14l11-7Z"/>',
+  close:'<path d="M6 6l12 12M18 6 6 18"/>',
+  left:'<path d="m15 6-6 6 6 6"/>',
+  right:'<path d="m9 6 6 6-6 6"/>',
+  image:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/>',
+  video:'<rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3Z"/>',
+  eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>'
+};
+function icon(name, size){
+  size = size || 18;
+  const s = document.createElement('span');
+  s.className = 'ic';
+  s.innerHTML = '<svg viewBox="0 0 24 24" width="' + size + '" height="' + size + '" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[name] || '') + '</svg>';
+  return s;
+}
+function el(tag, props){
+  const n = document.createElement(tag);
+  if (props) {
+    for (const k in props) {
+      const v = props[k];
+      if (v == null || v === false) continue;
+      if (k === 'class') n.className = v;
+      else if (k === 'text') n.textContent = v;
+      else if (k === 'style') n.style.cssText = v;
+      else if (k === 'value') n.value = v;
+      else if (k.slice(0, 2) === 'on') n.addEventListener(k.slice(2).toLowerCase(), v);
+      else if (v === true) n.setAttribute(k, '');
+      else n.setAttribute(k, v);
+    }
+  }
+  const kids = Array.prototype.slice.call(arguments, 2).flat(2);
+  for (const c of kids) {
+    if (c == null || c === false) continue;
+    n.append(c.nodeType ? c : document.createTextNode(String(c)));
+  }
+  return n;
+}
+const clone = o => JSON.parse(JSON.stringify(o));
+const uid = () => Math.random().toString(36).slice(2, 10);
+const plural = (n, a, b) => n + ' ' + (n === 1 ? a : b);
+const has = v => typeof v === 'string' && v.trim() !== '';
+const initials = name => (name || '').trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || 'ME';
+const safeSrc = s => (typeof s === 'string' && /^(data:(image|video)\/[a-z0-9.+-]+;base64,|\/(?!\/)|https:\/\/)/i.test(s)) ? s : '';
+function sget(k){ try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+function sset(k, v){ try { if (v == null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, v); } catch (e) {} }
+function lget(k){ try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lset(k, v){ try { localStorage.setItem(k, v); } catch (e) {} }
+async function cap(name){
+  try { return (window.claude && window.claude.use) ? await window.claude.use(name) : null; } catch (e) { return null; }
+}
+function normalize(s){
+  const d = s || {};
+  d.profile = Object.assign({name:'', position:'', summary:'', availability:'', photo:''}, d.profile);
+  d.personal = d.personal || {};
+  d.personal.objective = d.personal.objective || '';
+  d.personal.fields = Array.isArray(d.personal.fields) ? d.personal.fields : [];
+  ['education','experience','skills','projects','references'].forEach(k => { d[k] = Array.isArray(d[k]) ? d[k] : []; });
+  d.projects.forEach(p => { p.media = Array.isArray(p.media) ? p.media : []; if (!p.id) p.id = uid(); });
+  d.contact = Object.assign({phone:'', email:'', messenger:''}, d.contact);
+  d.auth = d.auth || {};
+  return d;
+}
+function tenureInfo(x){
+  const a = parseInt(x.from, 10);
+  const b = x.present ? NOW_YEAR : parseInt(x.to, 10);
+  const label = [x.from || '', x.present ? 'Present' : (x.to || '')].filter(Boolean).join(' – ');
+  const ok = Number.isFinite(a) && Number.isFinite(b) && b >= a;
+  let dur = '';
+  if (ok) { const d = b - a; dur = d === 0 ? 'Less than 1 yr' : d + (d === 1 ? ' yr' : ' yrs'); }
+  return {label, dur, a, b, ok};
+}
+function isDark(){
+  const t = document.documentElement.getAttribute('data-theme');
+  return t ? t === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+}
+function toggleTheme(){
+  const n = isDark() ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', n);
+  lset('pf.theme', n);
+}
+let toastEl, toastT;
+function toast(msg){
+  if (!toastEl) { toastEl = el('div', {class:'toast', role:'status', 'aria-live':'polite'}); document.body.append(toastEl); }
+  toastEl.textContent = msg;
+  toastEl.hidden = false;
+  clearTimeout(toastT);
+  toastT = setTimeout(() => { toastEl.hidden = true; }, 3000);
+}
+function fallbackCopy(text){
+  const ta = el('textarea', {style:'position:fixed;opacity:0;top:0;left:0'});
+  ta.value = text;
+  document.body.append(ta);
+  ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) {}
+  ta.remove();
+  return ok;
+}
+async function copyText(text, btn){
+  let ok = false;
+  try { await navigator.clipboard.writeText(text); ok = true; } catch (e) { ok = fallbackCopy(text); }
+  toast(ok ? 'Copied to clipboard' : 'Press and hold the text to copy it');
+  if (ok && btn) {
+    const old = Array.from(btn.childNodes);
+    btn.replaceChildren(icon('check', 16));
+    setTimeout(() => btn.replaceChildren(...old), 1400);
+  }
+}
+const hexToBytes = h => { const a = new Uint8Array(h.length / 2); for (let i = 0; i < a.length; i++) a[i] = parseInt(h.substr(i * 2, 2), 16); return a; };
+const bytesToHex = b => Array.from(b, x => x.toString(16).padStart(2, '0')).join('');
+const K256 = new Uint32Array([0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+const H256 = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+const WBUF = new Uint32Array(64);
+function compress(st, blk){
+  const W = WBUF;
+  for (let i = 0; i < 16; i++) W[i] = blk[i];
+  for (let i = 16; i < 64; i++) {
+    const a = W[i - 15], b = W[i - 2];
+    const s0 = ((a >>> 7) | (a << 25)) ^ ((a >>> 18) | (a << 14)) ^ (a >>> 3);
+    const s1 = ((b >>> 17) | (b << 15)) ^ ((b >>> 19) | (b << 13)) ^ (b >>> 10);
+    W[i] = (W[i - 16] + s0 + W[i - 7] + s1) | 0;
+  }
+  let a = st[0], b = st[1], c = st[2], d = st[3], e = st[4], f = st[5], g = st[6], h = st[7];
+  for (let i = 0; i < 64; i++) {
+    const S1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
+    const ch = (e & f) ^ (~e & g);
+    const t1 = (h + S1 + ch + K256[i] + W[i]) | 0;
+    const S0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
+    const mj = (a & b) ^ (a & c) ^ (b & c);
+    const t2 = (S0 + mj) | 0;
+    h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+  }
+  return Uint32Array.of((st[0] + a) | 0, (st[1] + b) | 0, (st[2] + c) | 0, (st[3] + d) | 0, (st[4] + e) | 0, (st[5] + f) | 0, (st[6] + g) | 0, (st[7] + h) | 0);
+}
+function wordsToBytes(w){
+  const b = new Uint8Array(w.length * 4);
+  const dv = new DataView(b.buffer);
+  for (let i = 0; i < w.length; i++) dv.setUint32(i * 4, w[i]);
+  return b;
+}
+function sha256From(st, bytes, prefixLen){
+  const total = bytes.length;
+  const padded = new Uint8Array(Math.ceil((total + 9) / 64) * 64);
+  padded.set(bytes);
+  padded[total] = 0x80;
+  const bits = (prefixLen + total) * 8;
+  const dv = new DataView(padded.buffer);
+  dv.setUint32(padded.length - 4, bits >>> 0);
+  dv.setUint32(padded.length - 8, Math.floor(bits / 4294967296));
+  const blk = new Uint32Array(16);
+  for (let o = 0; o < padded.length; o += 64) {
+    for (let i = 0; i < 16; i++) blk[i] = dv.getUint32(o + i * 4);
+    st = compress(st, blk);
+  }
+  return st;
+}
+function pbkdf2Js(pw, salt, iter){
+  let key = pw;
+  if (key.length > 64) key = wordsToBytes(sha256From(Uint32Array.from(H256), key, 0));
+  const ip = new Uint32Array(16), op = new Uint32Array(16);
+  for (let i = 0; i < 64; i++) {
+    const b = i < key.length ? key[i] : 0;
+    ip[i >> 2] |= (b ^ 0x36) << (24 - (i & 3) * 8);
+    op[i >> 2] |= (b ^ 0x5c) << (24 - (i & 3) * 8);
+  }
+  const H0 = Uint32Array.from(H256);
+  const iS = compress(H0, ip), oS = compress(H0, op);
+  const msg = new Uint8Array(salt.length + 4);
+  msg.set(salt);
+  msg[msg.length - 1] = 1;
+  let u = sha256From(oS, wordsToBytes(sha256From(iS, msg, 64)), 64);
+  const t = Uint32Array.from(u);
+  const blk = new Uint32Array(16);
+  for (let n = 1; n < iter; n++) {
+    blk.fill(0); blk.set(u); blk[8] = 0x80000000; blk[15] = 768;
+    const inner = compress(iS, blk);
+    blk.fill(0); blk.set(inner); blk[8] = 0x80000000; blk[15] = 768;
+    u = compress(oS, blk);
+    for (let i = 0; i < 8; i++) t[i] ^= u[i];
+  }
+  return Array.from(t, w => w.toString(16).padStart(8, '0')).join('');
+}
+function randomBytes(n){
+  const a = new Uint8Array(n);
+  if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(a);
+  else for (let i = 0; i < n; i++) a[i] = Math.floor(Math.random() * 256);
+  return a;
+}
+async function derive(pw, saltHex, iter){
+  const pwb = new TextEncoder().encode(pw);
+  if (window.crypto && crypto.subtle) {
+    try {
+      const key = await crypto.subtle.importKey('raw', pwb, 'PBKDF2', false, ['deriveBits']);
+      const bits = await crypto.subtle.deriveBits({name:'PBKDF2', salt:hexToBytes(saltHex), iterations:iter, hash:'SHA-256'}, key, 256);
+      return bytesToHex(new Uint8Array(bits));
+    } catch (e) {}
+  }
+  await new Promise(r => setTimeout(r, 30));
+  return pbkdf2Js(pwb, hexToBytes(saltHex), iter);
+}
+function sameHex(a, b){
+  if (typeof a !== 'string' || typeof b !== 'string') return false;
+  let diff = a.length ^ b.length;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ (b.charCodeAt(i) || 0);
+  return diff === 0;
+}
+async function verifyPassword(pw, auth){
+  if (!auth || !auth.salt || !auth.hash) return false;
+  const h = await derive(pw, auth.salt, auth.iter || 150000);
+  return sameHex(h, auth.hash) || (!!auth.alt && sameHex(h, auth.alt));
+}
+function devAuthed(){
+  const t = parseInt(sget('pf.dev') || '0', 10);
+  return t > 0 && Date.now() - t < 4 * 3600 * 1000;
+}
+
+/* ---------- employer view ---------- */
+function secHead(title, meta){
+  return el('div', {class:'sec-head'}, el('h1', {text:title}), meta ? el('span', {class:'meta', text:meta}) : null);
+}
+const emptyState = text => el('div', {class:'empty', text});
+function sheet(rows){
+  return el('dl', {class:'sheet'}, rows.map(r => el('div', {class:'row'}, el('dt', {text:r[0]}), el('span', {class:'leader', 'aria-hidden':'true'}), el('dd', {text:r[1]}))));
+}
+function stampEl(t){
+  const parts = [t.label, t.dur].filter(Boolean);
+  return parts.length ? el('div', {class:'stamp', text:parts.join(' · ')}) : null;
+}
+function copyBtn(text, label){
+  return el('button', {class:'icon-btn small', type:'button', 'aria-label':'Copy ' + (label || 'text'), onClick:e => copyText(text, e.currentTarget)}, icon('copy', 16));
+}
+function videoTile(){
+  return el('div', {class:'vid-tile'}, el('span', {class:'play'}, icon('play', 22)), el('span', {class:'vt', text:'Video'}));
+}
+
+function viewHome(d, go){
+  const p = d.profile;
+  const photo = safeSrc(p.photo);
+  const hero = el('section', {class:'hero'},
+    el('div', {class:'hero-text'},
+      el('div', {class:'eyebrow', text:'Application for'}),
+      el('div', {class:'pos-line'}, el('span', {class:'position', text:p.position || 'Position applied for'})),
+      el('h1', {text:p.name || 'Your name'}),
+      has(p.summary) ? el('p', {class:'lead', text:p.summary}) : null,
+      has(p.availability) ? el('div', {class:'chips'}, el('span', {class:'chip'}, el('i', {class:'dot'}), p.availability)) : null,
+      el('div', {class:'cta'},
+        el('button', {class:'btn primary', type:'button', onClick:() => go('projects', true)}, 'View my projects', icon('arrow', 16)),
+        el('button', {class:'btn', type:'button', onClick:() => go('contact', true)}, 'Contact me'))
+    ),
+    el('div', {class:'photo'}, el('div', {class:'frame'},
+      photo ? el('img', {src:photo, alt:'Portrait of ' + (p.name || 'the applicant')}) : el('span', {class:'initials', 'aria-hidden':'true', text:initials(p.name)})))
+  );
+  const items = [
+    ['personal', 'Personal Information', d.personal.fields.filter(f => has(f.value)).length],
+    ['education', 'Educational Background', d.education.length],
+    ['experience', 'Experience', d.experience.length],
+    ['skills', 'Skills and Talent', d.skills.length],
+    ['projects', 'Project Accomplished', d.projects.length],
+    ['reference', 'Reference', d.references.length],
+    ['contact', 'Contact Me', [d.contact.phone, d.contact.email, d.contact.messenger].filter(has).length]
+  ];
+  const glance = el('div', {},
+    el('h2', {class:'mini-h', text:'At a glance'}),
+    el('div', {class:'glance'}, items.map(it => el('button', {class:'glance-row', type:'button', onClick:() => go(it[0], true)},
+      el('span', {text:it[1]}), el('span', {class:'count', text:String(it[2])}), icon('arrow', 16)))));
+  const pins = d.personal.fields.filter(f => f.pin && has(f.value));
+  const facts = pins.length ? el('div', {}, el('h2', {class:'mini-h', text:'Quick facts'}), sheet(pins.map(f => [f.label || 'Detail', f.value]))) : null;
+  return el('div', {}, hero, el('div', {class:'home-grid'}, glance, facts));
+}
+function viewPersonal(d){
+  const rows = d.personal.fields.filter(f => has(f.value)).map(f => [f.label || 'Detail', f.value]);
+  return el('div', {},
+    secHead('Personal Information', plural(rows.length, 'detail', 'details')),
+    has(d.personal.objective) ? el('div', {class:'objective'}, el('h2', {class:'mini-h', text:'Career objective'}), el('p', {text:d.personal.objective})) : null,
+    rows.length ? sheet(rows) : emptyState('No personal details have been added yet.'));
+}
+function viewEducation(d){
+  const list = d.education;
+  return el('div', {},
+    secHead('Educational Background', plural(list.length, 'school', 'schools')),
+    list.length ? el('ol', {class:'timeline'}, list.map(x => el('li', {class:'tl-item'}, el('div', {class:'tl-card'},
+      stampEl(tenureInfo(x)),
+      el('h2', {text:x.school || 'School name'}),
+      has(x.honors) ? el('span', {class:'honor'}, icon('star', 14), x.honors) : null)))) : emptyState('No schools have been added yet.'));
+}
+function spanChart(items){
+  const rows = items.map(x => ({name:x.company || 'Untitled', t:tenureInfo(x)})).filter(r => r.t.ok);
+  if (rows.length < 2) return null;
+  const min = Math.min.apply(null, rows.map(r => r.t.a));
+  const max = Math.max.apply(null, rows.map(r => r.t.b));
+  const span = Math.max(1, max - min);
+  const step = span <= 8 ? 1 : span <= 16 ? 2 : 5;
+  const ticks = [];
+  for (let y = min; y <= max; y += step) ticks.push(y);
+  if (ticks[ticks.length - 1] !== max) {
+    if (max - ticks[ticks.length - 1] < step / 2) ticks[ticks.length - 1] = max; else ticks.push(max);
+  }
+  return el('section', {class:'span', 'aria-label':'Career timeline chart'},
+    el('h2', {text:'Career span, ' + min + ' to ' + max}),
+    rows.map(r => el('div', {class:'span-row'},
+      el('span', {class:'span-name', title:r.name, text:r.name}),
+      el('div', {class:'track'}, el('div', {class:'fill', style:'left:' + ((r.t.a - min) / span * 100) + '%;width:' + Math.max((r.t.b - r.t.a) / span * 100, 2.5) + '%'})))),
+    el('div', {class:'axis'}, el('span'), el('div', {class:'ticks', 'aria-hidden':'true'}, ticks.map(y => el('span', {style:'left:' + ((y - min) / span * 100) + '%', text:String(y)})))));
+}
+function viewExperience(d){
+  const list = d.experience;
+  return el('div', {},
+    secHead('Experience', plural(list.length, 'position', 'positions')),
+    spanChart(list),
+    list.length ? el('ol', {class:'timeline'}, list.map(x => el('li', {class:'tl-item'}, el('div', {class:'tl-card'},
+      stampEl(tenureInfo(x)),
+      el('h2', {text:x.company || 'Company name'}),
+      has(x.position) ? el('p', {class:'role', text:x.position}) : null)))) : emptyState('No work experience has been added yet.'));
+}
+function viewSkills(d){
+  let filter = 'all', sort = 'order';
+  const defs = [['all', 'All'], ['Skill', 'Skills'], ['Talent', 'Talents']];
+  const grid = el('div', {class:'skill-grid'});
+  const fbtns = defs.map(df => el('button', {class:'filter', type:'button', onClick:() => { filter = df[0]; draw(); }}, df[1]));
+  const sortBtn = el('button', {class:'filter', type:'button', onClick:() => { sort = sort === 'order' ? 'level' : 'order'; draw(); }}, 'Highest level first');
+  function card(s){
+    const lv = Math.min(5, Math.max(1, parseInt(s.level, 10) || 1));
+    return el('article', {class:'skill'},
+      el('div', {class:'skill-top'}, el('h3', {text:s.name || 'Skill'}), el('span', {class:'type', text:s.type === 'Talent' ? 'Talent' : 'Skill'})),
+      el('div', {class:'meter', role:'img', 'aria-label':LEVELS[lv - 1] + ', level ' + lv + ' of 5'}, [1, 2, 3, 4, 5].map(i => el('i', {class:i <= lv ? 'on' : '', style:'--i:' + i}))),
+      el('div', {class:'level', text:LEVELS[lv - 1]}));
+  }
+  function draw(){
+    fbtns.forEach((b, i) => b.setAttribute('aria-pressed', String(defs[i][0] === filter)));
+    sortBtn.setAttribute('aria-pressed', String(sort === 'level'));
+    let list = d.skills.filter(s => filter === 'all' || (s.type === 'Talent' ? 'Talent' : 'Skill') === filter);
+    if (sort === 'level') list = list.slice().sort((a, b) => (b.level || 0) - (a.level || 0));
+    grid.replaceChildren(...(list.length ? list.map(card) : [emptyState('Nothing in this category yet.')]));
+  }
+  draw();
+  return el('div', {},
+    secHead('Skills and Talent', plural(d.skills.length, 'item', 'items')),
+    d.skills.length ? el('div', {class:'filters', role:'group', 'aria-label':'Filter and sort'}, fbtns, sortBtn) : null,
+    d.skills.length ? grid : emptyState('No skills have been added yet.'));
+}
+function dataUriToBlobUrl(uri){
+  try {
+    const i = uri.indexOf(',');
+    const mime = uri.slice(5, i).split(';')[0];
+    const bin = atob(uri.slice(i + 1));
+    const bytes = new Uint8Array(bin.length);
+    for (let k = 0; k < bin.length; k++) bytes[k] = bin.charCodeAt(k);
+    return URL.createObjectURL(new Blob([bytes], {type:mime}));
+  } catch (e) { return ''; }
+}
+function openProject(p, opener){
+  const media = (p.media || []).filter(m => safeSrc(m.src));
+  const stage = el('div', {class:'stage'});
+  const thumbs = el('div', {class:'thumbs'});
+  let idx = 0, blobUrl = '';
+  const prev = el('button', {class:'icon-btn nav-btn prev', type:'button', 'aria-label':'Previous', onClick:() => show((idx - 1 + media.length) % media.length)}, icon('left'));
+  const next = el('button', {class:'icon-btn nav-btn next', type:'button', 'aria-label':'Next', onClick:() => show((idx + 1) % media.length)}, icon('right'));
+  const closeBtn = el('button', {class:'icon-btn x', type:'button', 'aria-label':'Close', onClick:close}, icon('close'));
+  const scrim = el('div', {class:'scrim', onClick:e => { if (e.target === scrim) close(); }},
+    el('div', {class:'modal', role:'dialog', 'aria-modal':'true', 'aria-label':p.title || 'Project'},
+      closeBtn,
+      el('div', {class:'stage-wrap'}, stage, media.length > 1 ? [prev, next] : null),
+      media.length > 1 ? thumbs : null,
+      el('div', {class:'m-body'}, el('h2', {text:p.title || 'Untitled project'}), has(p.description) ? el('p', {text:p.description}) : null)));
+  function show(i){
+    idx = i;
+    if (blobUrl) { URL.revokeObjectURL(blobUrl); blobUrl = ''; }
+    stage.replaceChildren();
+    const m = media[i];
+    if (!m) {
+      stage.append(el('div', {class:'no-media'}, icon('image', 28), el('span', {text:'No photo or video has been added to this project yet.'})));
+      return;
+    }
+    if (m.type === 'video') {
+      let src = m.src;
+      if (src.indexOf('data:') === 0) { blobUrl = dataUriToBlobUrl(src); src = blobUrl || src; }
+      stage.append(el('video', {controls:true, playsinline:true, preload:'metadata', src}));
+    } else {
+      stage.append(el('img', {src:m.src, alt:(p.title || 'Project') + ', photo ' + (i + 1) + ' of ' + media.length}));
+    }
+    Array.from(thumbs.children).forEach((t, k) => t.setAttribute('aria-current', String(k === i)));
+  }
+  media.forEach((m, i) => thumbs.append(el('button', {class:'thumb', type:'button', 'aria-label':'Show item ' + (i + 1), onClick:() => show(i)}, m.type === 'video' ? videoTile() : el('img', {src:m.src, alt:''}))));
+  function onKey(e){
+    if (e.key === 'Escape') close();
+    else if (media.length > 1 && e.key === 'ArrowLeft') show((idx - 1 + media.length) % media.length);
+    else if (media.length > 1 && e.key === 'ArrowRight') show((idx + 1) % media.length);
+  }
+  function close(){
+    document.removeEventListener('keydown', onKey);
+    if (blobUrl) URL.revokeObjectURL(blobUrl);
+    scrim.remove();
+    document.documentElement.style.overflow = '';
+    if (opener && opener.focus) opener.focus();
+  }
+  document.addEventListener('keydown', onKey);
+  document.documentElement.style.overflow = 'hidden';
+  document.body.append(scrim);
+  show(0);
+  closeBtn.focus();
+}
+function projectCard(p){
+  const media = (p.media || []).filter(m => safeSrc(m.src));
+  const cover = media.find(m => m.type !== 'video') || media[0];
+  const photos = media.filter(m => m.type !== 'video').length;
+  const vids = media.length - photos;
+  const tags = [photos ? plural(photos, 'photo', 'photos') : '', vids ? plural(vids, 'video', 'videos') : ''].filter(Boolean).join(' · ');
+  return el('button', {class:'proj', type:'button', onClick:e => openProject(p, e.currentTarget)},
+    el('div', {class:'cover'}, !cover ? icon('image', 30) : cover.type === 'video' ? videoTile() : el('img', {src:cover.src, alt:'', loading:'lazy'})),
+    el('div', {class:'body'}, el('h3', {text:p.title || 'Untitled project'}), has(p.description) ? el('p', {text:p.description}) : null, el('span', {class:'tags', text:tags || 'View details'})));
+}
+function viewProjects(d){
+  return el('div', {},
+    secHead('Project Accomplished', plural(d.projects.length, 'project', 'projects')),
+    d.projects.length ? el('div', {class:'proj-grid'}, d.projects.map(projectCard)) : emptyState('No projects have been added yet.'));
+}
+function kv(label, value, copy){
+  return el('div', {class:'kv'}, el('dt', {text:label}), el('dd', {}, el('span', {text:value}), copy ? copyBtn(value, label.toLowerCase()) : null));
+}
+function viewReference(d){
+  const list = d.references;
+  return el('div', {},
+    secHead('Reference', plural(list.length, 'reference', 'references')),
+    list.length ? el('div', {class:'ref-grid'}, list.map(r => el('article', {class:'ref'},
+      el('h2', {text:r.name || 'Reference name'}),
+      el('dl', {class:'stack-s'},
+        has(r.position) ? kv('Current job position', r.position) : null,
+        has(r.address) ? kv('Home address', r.address) : null,
+        has(r.phone) ? kv('Phone number', r.phone, true) : null)))) : emptyState('No references have been added yet.'));
+}
+function viewContact(d){
+  const c = d.contact;
+  const rows = [['Phone number', c.phone], ['Email address', c.email], ['Messenger name', c.messenger]].filter(r => has(r[1]));
+  return el('div', {},
+    secHead('Contact Me', rows.length ? 'Tap copy to save a detail' : ''),
+    el('p', {class:'lead', text:'I would be glad to hear from you about the position. You can reach me through any of these.'}),
+    rows.length ? el('div', {class:'contact-list'}, rows.map(r => el('div', {class:'contact-row'},
+      el('div', {}, el('div', {class:'eyebrow', text:r[0]}), el('div', {class:'contact-val', text:r[1]})),
+      copyBtn(r[1], r[0].toLowerCase())))) : emptyState('No contact details have been added yet.'),
+    rows.length ? el('button', {class:'btn', type:'button', onClick:e => copyText(rows.map(r => r[0] + ': ' + r[1]).join('\n'), e.currentTarget)}, icon('copy', 16), 'Copy all details') : null);
+}
+const VIEWS = {home:viewHome, personal:viewPersonal, education:viewEducation, experience:viewExperience, skills:viewSkills, projects:viewProjects, reference:viewReference, contact:viewContact};
+
+let sealTaps = 0, sealT;
+function sealTap(){
+  sealTaps++;
+  clearTimeout(sealT);
+  sealT = setTimeout(() => { sealTaps = 0; }, 2500);
+  if (sealTaps >= 5) { sealTaps = 0; openGate(); }
+}
+function renderSite(data, opts){
+  opts = opts || {};
+  const nav = el('nav', {class:'tabs', 'aria-label':'Portfolio sections'});
+  const main = el('main', {class:'page wrap', id:'main'});
+  const themeBtn = el('button', {class:'icon-btn', type:'button', 'aria-label':'Switch between light and dark theme', onClick:() => { toggleTheme(); setIcon(); }});
+  function setIcon(){ themeBtn.replaceChildren(icon(isDark() ? 'sun' : 'moon')); }
+  setIcon();
+  const buttons = {};
+  TABS.forEach(t => {
+    const b = el('button', {class:'tab', type:'button', onClick:() => show(t[0], true)}, t[1]);
+    buttons[t[0]] = b;
+    nav.append(b);
+  });
+  function show(id, user){
+    siteView = id;
+    Object.keys(buttons).forEach(k => { if (k === id) buttons[k].setAttribute('aria-current', 'page'); else buttons[k].removeAttribute('aria-current'); });
+    const nodes = [];
+    if (data.sample && !opts.preview) nodes.push(el('p', {class:'banner', role:'note', text:'This portfolio is still being set up. The details shown here are placeholders until the owner adds their own.'}));
+    nodes.push(el('div', {class:'view'}, VIEWS[id](data, show)));
+    main.replaceChildren(...nodes);
+    if (user) {
+      window.scrollTo({top:0});
+      try { buttons[id].scrollIntoView({inline:'center', block:'nearest'}); } catch (e) {}
+    }
+  }
+  const header = el('header', {class:'bar'}, el('div', {class:'wrap'},
+    el('button', {class:'mono-mark', type:'button', 'aria-label':'Home', onClick:() => show('home', true), text:initials(data.profile.name)}),
+    nav, themeBtn));
+  const foot = el('footer', {class:'foot'}, el('div', {class:'wrap', onClick:opts.preview ? null : sealTap},
+    el('span', {class:'seal', text:'©'}),
+    ' ' + NOW_YEAR + ' ' + (data.profile.name || '') + ' · Job application portfolio'));
+  show(siteView, false);
+  return el('div', {class:'site'}, header, main, foot);
+}
+
+/* ---------- gateway ---------- */
+function openGate(){ if (mode === 'site') { mode = 'gate'; render(); window.scrollTo({top:0}); } }
+async function tryUnlock(value){
+  if (Date.now() < lockUntil) return {ok:false, locked:true};
+  await remoteReady;
+  let ok = false;
+  if (remote) {
+    try {
+      const r = await fetch(API + '?action=verify', {method:'POST', headers:{'x-dev-password':encodeURIComponent(value)}});
+      if (r.ok) ok = true;
+      else if (r.status === 429) return {ok:false, locked:true};
+      else if (r.status !== 401) return {ok:false, unsupported:true};
+    } catch (e) { return {ok:false, unsupported:true}; }
+  } else {
+    try { ok = await verifyPassword(value, state.auth); } catch (e) { return {ok:false, unsupported:true}; }
+  }
+  if (ok) { devPw = value; sset('pf.pw', value); fails = 0; return {ok:true}; }
+  fails++;
+  if (fails >= 5) { lockUntil = Date.now() + 30000; fails = 0; return {ok:false, locked:true}; }
+  return {ok:false};
+}
+function renderGate(){
+  const msg = el('p', {class:'msg', id:'gate-msg', role:'alert'});
+  const pw = el('input', {class:'in', id:'gate-pw', type:'password', autocomplete:'current-password', autocapitalize:'off', autocorrect:'off', spellcheck:'false', placeholder:'Enter password', 'aria-describedby':'gate-msg'});
+  const reveal = el('button', {class:'btn ghost', type:'button', onClick:() => { pw.type = pw.type === 'password' ? 'text' : 'password'; reveal.textContent = pw.type === 'password' ? 'Show' : 'Hide'; }}, 'Show');
+  const go = el('button', {class:'btn primary', type:'button'}, 'Unlock');
+  let busy = false;
+  async function attempt(){
+    if (busy) return;
+    if (!pw.value) { msg.textContent = 'Enter the password to continue.'; return; }
+    busy = true;
+    go.disabled = true;
+    msg.textContent = 'Checking…';
+    let r;
+    try { r = await tryUnlock(pw.value); } catch (err) { r = {ok:false, unsupported:true}; }
+    busy = false;
+    go.disabled = false;
+    if (r.ok) { sset('pf.dev', String(Date.now())); enterDev(); return; }
+    pw.value = '';
+    msg.textContent = r.unsupported ? 'This browser cannot check the password on this page.' : r.locked ? 'Too many attempts. Wait 30 seconds and try again.' : 'Incorrect password.';
+    pw.focus();
+  }
+  pw.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); attempt(); } });
+  go.addEventListener('click', attempt);
+  const form = el('div', {class:'card gate-card'},
+    el('div', {class:'eyebrow', text:'Restricted'}),
+    el('h1', {text:'Developer gateway'}),
+    el('p', {class:'hint', text:'Enter the developer password to edit this portfolio.'}),
+    el('label', {class:'f', 'for':'gate-pw'}, el('span', {text:'Password'}), el('div', {class:'pw-row'}, pw, reveal)),
+    msg,
+    el('div', {class:'btn-row'}, go, el('button', {class:'btn ghost', type:'button', onClick:() => { mode = 'site'; render(); }}, 'Back to portfolio')));
+  setTimeout(() => pw.focus(), 30);
+  return el('main', {class:'wrap gate'}, form);
+}
+
+/* ---------- developer view ---------- */
+function markDirty(){ if (!dirty) { dirty = true; updateSaveBar(); } clearTimeout(draftT); draftT = setTimeout(saveDraft, 500); }
+function updateSaveBar(){
+  const s = document.getElementById('sv-status');
+  if (!s) return;
+  const b = document.getElementById('sv-save');
+  const dsc = document.getElementById('sv-discard');
+  const st = saving ? 'saving' : dirty ? 'dirty' : 'clean';
+  s.dataset.state = st;
+  s.textContent = saving ? 'Saving…' : dirty ? 'Unsaved changes' : (state.sample ? 'Sample content, not yet replaced' : 'No unsaved changes');
+  b.disabled = saving || !canSave || (!dirty && !state.sample);
+  b.textContent = remote ? 'Save changes' : 'Download updated file';
+  dsc.disabled = saving || !dirty;
+}
+function pageBytes(d){ return JSON.stringify(d).length + 70000; }
+function updateSize(){
+  const e = document.getElementById('sv-size');
+  if (!e || !draft) return;
+  const b = pageBytes(draft);
+  e.textContent = 'Page size ' + (b / 1048576).toFixed(1) + ' of 15 MB';
+  e.dataset.warn = b > LIMIT * 0.9 ? '1' : '0';
+}
+function updateNotice(){
+  const n = document.getElementById('dev-notice');
+  if (!n) return;
+  const nodes = [];
+  if (!remote) nodes.push(el('p', {class:'banner', role:'note', text:'Saving to your website is not connected in this copy. Your edits are kept on this device automatically. Press Download updated file to get a copy you can upload.'}));
+  if (state.sample) nodes.push(el('p', {class:'banner', role:'note', text:'You are looking at sample content. Replace it with your own details, then save.'}));
+  n.replaceChildren(...nodes);
+}
+function twoStep(btn, armedLabel, run){
+  const orig = Array.from(btn.childNodes).map(x => x.cloneNode(true));
+  let t, armed = false;
+  function reset(){ armed = false; btn.classList.remove('armed'); btn.replaceChildren(...orig.map(x => x.cloneNode(true))); }
+  btn.addEventListener('click', () => {
+    if (!armed) { armed = true; btn.classList.add('armed'); btn.replaceChildren(document.createTextNode(armedLabel)); t = setTimeout(reset, 3200); }
+    else { clearTimeout(t); reset(); run(); }
+  });
+  return btn;
+}
+function move(arr, i, dir){
+  const j = i + dir;
+  if (j < 0 || j >= arr.length) return;
+  const t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+  markDirty(); redrawDev();
+}
+function inp(obj, key, o){
+  const c = o.multiline
+    ? el('textarea', {class:'in', id:o.id, rows:o.rows || 4, placeholder:o.placeholder || '', maxlength:o.maxlength || null})
+    : el('input', {class:'in', id:o.id, type:'text', placeholder:o.placeholder || '', maxlength:o.maxlength || null, inputmode:o.inputmode || null, autocomplete:'off'});
+  c.value = obj[key] == null ? '' : obj[key];
+  c.addEventListener('input', () => {
+    if (o.digits) c.value = c.value.replace(/\D/g, '').slice(0, 4);
+    obj[key] = c.value;
+    markDirty();
+  });
+  return el('label', {class:'f', 'for':o.id}, el('span', {text:o.label}), c);
+}
+function sel(obj, key, o){
+  const s = el('select', {class:'in', id:o.id});
+  o.options.forEach(op => s.append(el('option', {value:String(op[0]), text:op[1]})));
+  s.value = String(obj[key]);
+  s.addEventListener('change', () => { obj[key] = typeof o.options[0][0] === 'number' ? parseInt(s.value, 10) : s.value; markDirty(); });
+  return el('label', {class:'f', 'for':o.id}, el('span', {text:o.label}), s);
+}
+function chk(obj, key, text, id, onChange){
+  const c = el('input', {type:'checkbox', id});
+  c.checked = !!obj[key];
+  c.addEventListener('change', () => { obj[key] = c.checked; markDirty(); if (onChange) onChange(c.checked); });
+  return el('label', {class:'check', 'for':id}, c, el('span', {text}));
+}
+function fileBtn(o){
+  const input = el('input', {class:'fin', type:'file', accept:o.accept, multiple:o.multiple || null, 'aria-label':o.label});
+  input.addEventListener('change', () => {
+    const files = Array.from(input.files || []);
+    input.value = '';
+    if (files.length) o.onFiles(files);
+  });
+  return el('label', {class:'btn file-btn' + (o.small ? ' small' : '')}, input, icon(o.icon, 16), o.label);
+}
+function listEditor(arr, o){
+  const box = el('div', {class:'stack'});
+  arr.forEach((item, i) => {
+    const del = twoStep(el('button', {class:'icon-btn small', type:'button', 'aria-label':'Delete this ' + o.noun.toLowerCase()}, icon('trash', 16)), 'Confirm', () => { arr.splice(i, 1); markDirty(); redrawDev(); });
+    box.append(el('div', {class:'card'},
+      el('div', {class:'item-head'},
+        el('strong', {class:'item-title', text:o.noun + ' ' + (i + 1)}),
+        el('div', {class:'tools'},
+          el('button', {class:'icon-btn small', type:'button', 'aria-label':'Move up', disabled:i === 0, onClick:() => move(arr, i, -1)}, icon('up', 16)),
+          el('button', {class:'icon-btn small', type:'button', 'aria-label':'Move down', disabled:i === arr.length - 1, onClick:() => move(arr, i, 1)}, icon('down', 16)),
+          del)),
+      o.row(item, i)));
+  });
+  box.append(el('div', {}, el('button', {class:'btn', type:'button', onClick:() => { arr.push(o.add()); markDirty(); redrawDev(); }}, icon('plus', 16), 'Add ' + o.noun.toLowerCase())));
+  return box;
+}
+function tenureFields(f, idp){
+  const to = inp(f, 'to', {label:'Year ended', id:idp + '-to', placeholder:'YYYY', inputmode:'numeric', digits:true, maxlength:4});
+  const toInput = to.querySelector('input');
+  toInput.disabled = !!f.present;
+  return el('div', {class:'stack-s'},
+    el('div', {class:'grid2'}, inp(f, 'from', {label:'Year started', id:idp + '-from', placeholder:'YYYY', inputmode:'numeric', digits:true, maxlength:4}), to),
+    chk(f, 'present', 'Still here (shows as Present)', idp + '-present', v => { toInput.disabled = v; }));
+}
+async function readAsDataUrl(file){
+  return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(r.error); r.readAsDataURL(file); });
+}
+async function imageToDataUrl(file, o){
+  o = o || {};
+  const max = o.max || 1400;
+  let bmp;
+  try { bmp = await createImageBitmap(file); }
+  catch (e) {
+    const url = URL.createObjectURL(file);
+    bmp = await new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = url; });
+    URL.revokeObjectURL(url);
+  }
+  const w = bmp.width, h = bmp.height;
+  let sx = 0, sy = 0, sw = w, sh = h, dw, dh;
+  if (o.crop) {
+    if (w / h > o.crop) sw = h * o.crop; else sh = w / o.crop;
+    sx = (w - sw) / 2; sy = (h - sh) / 2;
+    dw = Math.min(max, Math.round(sw)); dh = Math.round(dw / o.crop);
+  } else {
+    const sc = Math.min(1, max / Math.max(w, h));
+    dw = Math.round(w * sc); dh = Math.round(h * sc);
+  }
+  const c = document.createElement('canvas');
+  c.width = dw; c.height = dh;
+  const g = c.getContext('2d');
+  g.fillStyle = '#fff';
+  g.fillRect(0, 0, dw, dh);
+  g.drawImage(bmp, sx, sy, sw, sh, 0, 0, dw, dh);
+  return c.toDataURL('image/jpeg', o.quality || 0.82);
+}
+
+function editHome(){
+  const p = draft.profile;
+  const prev = el('div', {class:'photo-prev'});
+  function drawPrev(){ prev.replaceChildren(safeSrc(p.photo) ? el('img', {src:p.photo, alt:'Current profile photo'}) : el('span', {class:'initials', text:initials(p.name)})); }
+  drawPrev();
+  return el('div', {class:'stack'},
+    el('div', {class:'card'},
+      el('strong', {class:'item-title', text:'Profile photo'}),
+      el('div', {class:'photo-row'}, prev,
+        el('div', {class:'stack-s'},
+          el('div', {class:'btn-row'},
+            fileBtn({label:'Upload photo', accept:'image/*', icon:'image', onFiles:async fs => {
+              try {
+                let u = await imageToDataUrl(fs[0], {max:800, crop:0.8, quality:0.85});
+                if (remote) { toast('Uploading photo…'); u = await uploadMedia(dataUrlToBlob(u), 'image/jpeg'); }
+                p.photo = u; markDirty(); drawPrev(); updateSize();
+                if (remote) toast('Photo uploaded. Press Save changes to publish it.');
+              } catch (e) { toast(remote ? 'The photo could not be uploaded. Check your connection and password, then try again.' : 'That image could not be read. Try a JPG or PNG photo.'); }
+            }}),
+            el('button', {class:'btn', type:'button', onClick:() => { p.photo = ''; markDirty(); drawPrev(); updateSize(); }}, 'Remove')),
+          el('p', {class:'hint', text:'Shown as a portrait. Your photo is cropped to the centre automatically.'})))),
+    el('div', {class:'card'},
+      inp(p, 'name', {label:'Full name', id:'h-name', maxlength:80}),
+      inp(p, 'position', {label:'Position you are applying for', id:'h-pos', maxlength:100}),
+      inp(p, 'availability', {label:'Availability', id:'h-av', placeholder:'e.g. Available to start immediately', maxlength:80}),
+      inp(p, 'summary', {label:'Short introduction', id:'h-sum', multiline:true, rows:4, maxlength:400})));
+}
+function editPersonal(){
+  const pr = draft.personal;
+  return el('div', {class:'stack'},
+    el('div', {class:'card'}, inp(pr, 'objective', {label:'Career objective', id:'p-obj', multiline:true, rows:4, maxlength:600})),
+    listEditor(pr.fields, {noun:'Detail', add:() => ({label:'', value:'', pin:false}), row:(f, i) => el('div', {class:'stack-s'},
+      el('div', {class:'grid2'}, inp(f, 'label', {label:'Label', id:'pf-l' + i, placeholder:'e.g. Date of birth', maxlength:60}), inp(f, 'value', {label:'Value', id:'pf-v' + i, maxlength:200})),
+      chk(f, 'pin', 'Show on the Home page', 'pf-pin' + i))}));
+}
+function editEducation(){
+  return listEditor(draft.education, {noun:'School', add:() => ({school:'', from:'', to:'', present:false, honors:''}), row:(f, i) => el('div', {class:'stack-s'},
+    inp(f, 'school', {label:'Name of the school', id:'e-s' + i, maxlength:140}),
+    tenureFields(f, 'e-t' + i),
+    inp(f, 'honors', {label:'Honors received', id:'e-h' + i, placeholder:'e.g. Cum Laude, Dean\'s Lister', maxlength:160}))});
+}
+function editExperience(){
+  return listEditor(draft.experience, {noun:'Job', add:() => ({company:'', from:'', to:'', present:false, position:''}), row:(f, i) => el('div', {class:'stack-s'},
+    inp(f, 'company', {label:'Company name', id:'x-c' + i, maxlength:140}),
+    tenureFields(f, 'x-t' + i),
+    inp(f, 'position', {label:'Job position', id:'x-p' + i, maxlength:120}))});
+}
+function editSkills(){
+  return listEditor(draft.skills, {noun:'Skill', add:() => ({name:'', type:'Skill', level:3}), row:(f, i) => el('div', {class:'stack-s'},
+    inp(f, 'name', {label:'Skill or talent', id:'s-n' + i, maxlength:80}),
+    el('div', {class:'grid2'},
+      sel(f, 'type', {label:'Type', id:'s-t' + i, options:[['Skill', 'Skill'], ['Talent', 'Talent']]}),
+      sel(f, 'level', {label:'Level', id:'s-l' + i, options:LEVELS.map((l, k) => [k + 1, (k + 1) + ' · ' + l])})))});
+}
+function mediaManager(pr, idp){
+  const grid = el('div', {class:'media-grid'});
+  const status = el('p', {class:'hint', role:'status'});
+  function draw(){
+    grid.replaceChildren(...pr.media.map((m, i) => el('div', {class:'mthumb'},
+      m.type === 'video' ? videoTile() : el('img', {src:m.src, alt:'Uploaded photo ' + (i + 1)}),
+      el('button', {class:'mrm', type:'button', 'aria-label':'Remove this file', onClick:() => { pr.media.splice(i, 1); markDirty(); draw(); updateSize(); }}, icon('close', 14)),
+      m.external ? el('span', {class:'ext', text:'Large file'}) : null)));
+    if (!pr.media.length) grid.replaceChildren(el('p', {class:'hint', text:'No photos or videos yet.'}));
+    const ext = pr.media.some(m => m.external);
+    status.textContent = '';
+  }
+  draw();
+  async function addPhotos(files){
+    for (let k = 0; k < files.length; k++) {
+      if (pr.media.length >= 12) { toast('Each project can hold up to 12 files.'); break; }
+      status.textContent = 'Adding photo ' + (k + 1) + ' of ' + files.length + '…';
+      try {
+        let u = await imageToDataUrl(files[k], {max:1400, quality:0.82});
+        if (remote) u = await uploadMedia(dataUrlToBlob(u), 'image/jpeg');
+        pr.media.push({id:uid(), type:'image', src:u, name:files[k].name});
+      } catch (e) { toast(remote ? 'A photo could not be uploaded. Check your connection and try again.' : 'One image could not be read. Try a JPG or PNG photo.'); }
+    }
+    markDirty(); draw(); updateSize();
+  }
+  async function addVideo(file){
+    if (pr.media.length >= 12) { toast('Each project can hold up to 12 files.'); return; }
+    if (!/^video\/(mp4|webm)$/.test(file.type)) { toast('Use an MP4 or WebM video. Most phones can save videos as MP4.'); return; }
+    if (remote) {
+      if (file.size > 5 * 1048576) { toast('Videos must be under 5 MB. Trim the clip or lower its quality.'); return; }
+      status.textContent = 'Uploading video…';
+      try { pr.media.push({id:uid(), type:'video', src:await uploadMedia(file, file.type), name:file.name}); }
+      catch (e) { toast('The video could not be uploaded. Try a smaller file.'); }
+    } else if (file.size <= EMBED_VIDEO_MAX) {
+      status.textContent = 'Adding video…';
+      try { pr.media.push({id:uid(), type:'video', src:await readAsDataUrl(file), name:file.name}); }
+      catch (e) { toast('That video could not be read.'); }
+    } else {
+      toast('Videos over 7 MB cannot be added here. Trim the clip to under 7 MB.');
+    }
+    status.textContent = '';
+    markDirty(); draw(); updateSize();
+  }
+  return el('div', {class:'stack-s'},
+    el('span', {class:'item-title', text:'Photo or video proof'}),
+    grid,
+    el('div', {class:'btn-row'},
+      fileBtn({label:'Add photos', accept:'image/*', multiple:true, icon:'image', small:true, onFiles:addPhotos}),
+      fileBtn({label:'Add video', accept:'video/mp4,video/webm,video/*', icon:'video', small:true, onFiles:fs => addVideo(fs[0])})),
+    status);
+}
+function editProjects(){
+  return listEditor(draft.projects, {noun:'Project', add:() => ({id:uid(), title:'', description:'', media:[]}), row:(f, i) => el('div', {class:'stack-s'},
+    inp(f, 'title', {label:'Project title', id:'j-t' + i, maxlength:120}),
+    inp(f, 'description', {label:'Project description', id:'j-d' + i, multiline:true, rows:5, maxlength:1500}),
+    mediaManager(f, 'j-m' + i))});
+}
+function editReference(){
+  return listEditor(draft.references, {noun:'Reference', add:() => ({name:'', address:'', position:'', phone:''}), row:(f, i) => el('div', {class:'stack-s'},
+    inp(f, 'name', {label:'Name of reference', id:'r-n' + i, maxlength:100}),
+    inp(f, 'address', {label:'Home address', id:'r-a' + i, maxlength:200}),
+    el('div', {class:'grid2'}, inp(f, 'position', {label:'Current job position', id:'r-p' + i, maxlength:120}), inp(f, 'phone', {label:'Phone number', id:'r-ph' + i, inputmode:'tel', maxlength:40})))});
+}
+function editContact(){
+  const c = draft.contact;
+  return el('div', {class:'card'},
+    inp(c, 'phone', {label:'Phone number', id:'c-p', inputmode:'tel', maxlength:40}),
+    inp(c, 'email', {label:'Email address', id:'c-e', inputmode:'email', maxlength:120}),
+    inp(c, 'messenger', {label:'Messenger name', id:'c-m', maxlength:80}));
+}
+function editSecurity(){
+  const cur = el('input', {class:'in', id:'sec-cur', type:'password', autocomplete:'current-password'});
+  const nw = el('input', {class:'in', id:'sec-new', type:'password', autocomplete:'new-password'});
+  const cf = el('input', {class:'in', id:'sec-cf', type:'password', autocomplete:'new-password'});
+  const msg = el('p', {class:'msg', role:'status'});
+  const say = (t, ok) => { msg.textContent = t; msg.className = 'msg' + (ok ? ' ok' : ''); };
+  const btn = el('button', {class:'btn primary', type:'button'}, 'Update password');
+  async function changePw(){
+    say('');
+    btn.disabled = true;
+    try {
+      if (nw.value.length < 8) { say('Use at least 8 characters for the new password.'); return; }
+      if (nw.value !== cf.value) { say('The new passwords do not match.'); return; }
+      if (remote) {
+        const r = await fetch(API + '?action=password', {method:'POST', headers:{'x-dev-password':encodeURIComponent(cur.value), 'content-type':'application/json'}, body:JSON.stringify({password:nw.value})});
+        if (r.status === 401) { say('Current password is incorrect.'); return; }
+        if (!r.ok) { say('Could not update the password. Try again.'); return; }
+        devPw = nw.value; sset('pf.pw', devPw);
+        cur.value = nw.value = cf.value = '';
+        say('Password changed. It is active now.', true);
+        return;
+      }
+      if (!(await verifyPassword(cur.value, draft.auth))) { say('Current password is incorrect.'); return; }
+      const salt = bytesToHex(randomBytes(16));
+      draft.auth = {salt, iter:150000, hash:await derive(nw.value, salt, 150000)};
+      cur.value = nw.value = cf.value = '';
+      markDirty();
+      say('Password updated. Press Download updated file to apply it.', true);
+    } catch (err) { say('Could not update the password. Try again.'); }
+    finally { btn.disabled = false; }
+  }
+  btn.addEventListener('click', changePw);
+  const form = el('div', {class:'card'},
+    el('strong', {class:'item-title', text:'Change developer password'}),
+    el('label', {class:'f', 'for':'sec-cur'}, el('span', {text:'Current password'}), cur),
+    el('label', {class:'f', 'for':'sec-new'}, el('span', {text:'New password'}), nw),
+    el('label', {class:'f', 'for':'sec-cf'}, el('span', {text:'Confirm new password'}), cf),
+    msg, el('div', {}, btn));
+  return el('div', {class:'stack'}, form,
+    el('div', {class:'card'},
+      el('strong', {class:'item-title', text:'How to open this screen'}),
+      el('p', {class:'hint', text:'There is no link to this screen on the portfolio. Add #developer to the end of your portfolio link, or tap the footer text at the very bottom of any page five times quickly. Either one opens the password gateway.'}),
+      el('p', {class:'hint', text:remote ? 'The password is checked on the server and is never shown on the page. Changes go live when you press Save changes, and only someone with the password can save.' : 'The password is stored only as a salted hash and is never shown on the page. Saving to the website is not connected here, so changes only go live when you upload the downloaded file.'})));
+}
+const EDITORS = {home:editHome, personal:editPersonal, education:editEducation, experience:editExperience, skills:editSkills, projects:editProjects, reference:editReference, contact:editContact, security:editSecurity};
+const INTRO = {
+  home:['Home', 'The first screen employers see. It pulls its quick facts from Personal Information.'],
+  personal:['Personal Information', 'The basic details from your resume. Empty values stay hidden from employers.'],
+  education:['Educational Background', 'School name, years attended and honors received.'],
+  experience:['Experience', 'Company name, years of tenure and job position.'],
+  skills:['Skills and Talent', 'Abilities that match the job you are applying for.'],
+  projects:['Project Accomplished', 'A title, a description and photos or videos as proof of your work.'],
+  reference:['Reference', 'People who can speak for your work and character.'],
+  contact:['Contact Me', 'How an employer can reach you.'],
+  security:['Security', 'Developer access settings.']
+};
+function devHead(tab){
+  return el('div', {}, el('div', {class:'sec-head'}, el('h1', {text:INTRO[tab][0]}), el('span', {class:'meta', text:'Editing'})), el('p', {class:'hint', text:INTRO[tab][1]}));
+}
+let logoutArmed = false;
+function logout(){
+  if (dirty && !logoutArmed) {
+    logoutArmed = true;
+    toast('You have unsaved changes. Tap Log out again to leave without saving.');
+    setTimeout(() => { logoutArmed = false; }, 4000);
+    return;
+  }
+  logoutArmed = false;
+  sset('pf.dev', null); sset('pf.pw', null); devPw = '';
+  draft = null; dirty = false; devPreview = false; mode = 'site';
+  render();
+  window.scrollTo({top:0});
+}
+function discard(){ draft = clone(state); dirty = false; clearDraft(); updateSaveBar(); updateSize(); redrawDev(); toast('Changes discarded'); }
+function buildDocument(data){
+  const style = document.getElementById('pf-style').textContent;
+  const script = document.getElementById('pf-app').textContent;
+  const json = JSON.stringify(data).replace(/</g, '\\u003c');
+  let reset = FALLBACK_RESET;
+  try {
+    const s = document.head.querySelector('style');
+    if (s && /safe-area-inset/.test(s.textContent) && /\[hidden\]/.test(s.textContent)) reset = s.textContent;
+  } catch (e) {}
+  return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>' + reset + '</style></head><body>'
+    + TOP + '<style id="pf-style">' + style + '</style><div id="pf-root"></div>'
+    + '<script type="application/json" id="pf-data">' + json + '</' + 'script>'
+    + '<script id="pf-app">' + script + '</' + 'script></body></html>';
+}
+async function save(){
+  if (saving) return;
+  const next = clone(draft);
+  next.sample = false;
+  if (remote) {
+    delete next.auth;
+    saving = true; updateSaveBar();
+    try {
+      const r = await fetch(API + '?action=save', {method:'POST', headers:authHeaders({'content-type':'application/json'}), body:JSON.stringify({data:next})});
+      if (r.status === 401) toast('Your login expired. Log out and unlock the developer view again.');
+      else if (r.status === 413) toast('Too much text to save. Shorten some descriptions.');
+      else if (!r.ok) toast('Could not save. Try again in a moment.');
+      else {
+        state = normalize(Object.assign(clone(next), {auth:{}}));
+        draft = clone(state);
+        dirty = false;
+        clearDraft();
+        toast('Saved. Your changes are live.');
+      }
+    } catch (e) { toast('Could not reach the server. Your edits are still kept on this device.'); }
+    saving = false; updateSaveBar(); updateNotice(); updateSize();
+    return;
+  }
+  const doc = buildDocument(next);
+  if (doc.length > LIMIT + 700000) { toast('The page is too large to save. Remove or shrink some photos and videos.'); return; }
+  try {
+    const url = URL.createObjectURL(new Blob([doc], {type:'text/html'}));
+    const a = el('a', {href:url, download:'index.html'});
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    state = normalize(next);
+    draft = clone(state);
+    dirty = false; clearDraft();
+    updateNotice(); updateSaveBar();
+    toast('Downloaded index.html. Upload it to your website to publish these changes.');
+  } catch (e) { toast('Could not create the file. Try again.'); }
+}
+function saveBar(){
+  return el('div', {class:'savebar'}, el('div', {class:'wrap'},
+    el('div', {class:'sv-left'}, el('span', {id:'sv-status', class:'sv-status', role:'status'}), el('span', {id:'sv-size', class:'sv-size'})),
+    el('div', {class:'sv-right'},
+      twoStep(el('button', {id:'sv-discard', class:'btn', type:'button'}, 'Discard changes'), 'Tap again to discard', discard),
+      el('button', {id:'sv-save', class:'btn primary', type:'button', onClick:save}, 'Save changes'))));
+}
+function renderDev(){
+  const body = el('div', {id:'dev-body', class:'stack'});
+  const nav = el('nav', {class:'tabs', 'aria-label':'Editor sections'});
+  const btns = {};
+  TABS.concat([['security', 'Security']]).forEach(t => {
+    const b = el('button', {class:'tab', type:'button', onClick:() => { devTab = t[0]; redrawDev(); window.scrollTo({top:0}); }}, t[1]);
+    btns[t[0]] = b;
+    nav.append(b);
+  });
+  redrawDev = () => {
+    body.replaceChildren(devHead(devTab), EDITORS[devTab]());
+    Object.keys(btns).forEach(k => { if (k === devTab) btns[k].setAttribute('aria-current', 'page'); else btns[k].removeAttribute('aria-current'); });
+  };
+  redrawDev();
+  return el('div', {class:'dev'},
+    el('header', {class:'devbar'}, el('div', {class:'wrap devbar-in'},
+      el('div', {class:'devtitle'}, el('span', {class:'tagline', text:'Developer view'}), el('span', {class:'devnote', text:'Only you can see this'})),
+      el('div', {class:'devactions'},
+        el('button', {class:'btn small', type:'button', onClick:() => { devPreview = true; render(); window.scrollTo({top:0}); }}, icon('eye', 16), 'Preview'),
+        el('button', {class:'btn small', type:'button', onClick:logout}, 'Log out')))),
+    el('div', {class:'bar'}, el('div', {class:'wrap'}, nav)),
+    el('main', {class:'page wrap'}, el('div', {id:'dev-notice'}), body),
+    saveBar());
+}
+function previewBar(){
+  return el('div', {class:'savebar'}, el('div', {class:'wrap'},
+    el('span', {class:'sv-status', text:'Preview of the employer view, including unsaved changes'}),
+    el('button', {class:'btn primary', type:'button', onClick:() => { devPreview = false; render(); }}, 'Back to editor')));
+}
+function enterDev(){
+  mode = 'dev'; devTab = 'home'; devPreview = false; dirty = false; draft = null;
+  let restored = false;
+  const ld = lget('pf.draft2');
+  if (ld) { try { draft = normalize(JSON.parse(ld)); dirty = true; restored = true; } catch (e) {} }
+  if (!draft) draft = clone(state);
+  if (remote) draft.auth = {};
+  render();
+  window.scrollTo({top:0});
+  if (restored) toast('Restored your unsaved edits from this device.');
+}
+
+/* ---------- boot ---------- */
+function render(){
+  $root.replaceChildren();
+  if (mode === 'gate') $root.append(renderGate());
+  else if (mode === 'dev' && draft) {
+    if (devPreview) $root.append(renderSite(draft, {preview:true}), previewBar());
+    else $root.append(renderDev());
+    updateNotice(); updateSaveBar(); updateSize();
+  } else $root.append(renderSite(state, {}));
+}
+const savedTheme = lget('pf.theme');
+if (savedTheme === 'light' || savedTheme === 'dark') document.documentElement.setAttribute('data-theme', savedTheme);
+try {
+  const h = (location.hash || '').slice(1);
+  if (VIEWS[h]) siteView = h;
+} catch (e) {}
+window.addEventListener('hashchange', () => { try { if (location.hash === '#developer') openGate(); } catch (e) {} });
+document.addEventListener('keydown', e => { if (e.altKey && e.shiftKey && (e.key === 'D' || e.key === 'd')) openGate(); });
+let hashGate = false;
+try { hashGate = location.hash === '#developer'; } catch (e) {}
+if (hashGate) mode = 'gate';
+render();
+remoteReady.then(() => {
+  if (devAuthed() && (!remote || devPw)) enterDev();
+  else if (mode === 'site') render();
+});
+if (sget('pf.just') === '1') { sset('pf.just', null); toast('Saved. Your changes are now live.'); }
+})();
+</script>
+</body></html>
